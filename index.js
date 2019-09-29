@@ -78,22 +78,25 @@ function listeners(){
 function traducir(){
   var codigo = $("#caja_codigo").val();
   codigo = codigo.trim();
-  codigo_idividualizado = codigo.split(' ');
-  $("#caja_resultado").val('');
-  codigo_idividualizado.forEach(function(item_codigo) {
-    if (item_codigo != '') {
-      if (/^([0-9])*$/.test(item_codigo)) {
-        $("#caja_resultado").val($("#caja_resultado").val()+' '+tabla['const']);
-      }else{
-        if(tabla[item_codigo] != undefined){
-          $("#caja_resultado").val($("#caja_resultado").val()+' '+tabla[item_codigo]);
+  if (codigo != '' ) {
+    codigo_idividualizado = codigo.split(' ');
+    $("#caja_resultado").val('');
+    codigo_idividualizado.forEach(function(item_codigo) {
+      if (item_codigo != '') {
+        if (/^([0-9])*$/.test(item_codigo)) {
+          $("#caja_resultado").val($("#caja_resultado").val()+' '+tabla['const']);
         }else{
-          $("#caja_resultado").val($("#caja_resultado").val()+' '+tabla['id']);
+          if(tabla[item_codigo] != undefined){
+            $("#caja_resultado").val($("#caja_resultado").val()+' '+tabla[item_codigo]);
+          }else{
+            $("#caja_resultado").val($("#caja_resultado").val()+' '+tabla['id']);
+          }
         }
       }
-    }else{
-      M.toast({html:'Nada para traducir',classes:'red'});
-      $("#caja_codigo").addClass('invalid');
-    }
-  });
+    });
+  }else{
+    M.toast({html:'Nada para traducir',classes:'red'});
+    $("#caja_codigo").addClass('invalid');
+    $("#caja_resultado").val('');
+  }
 }

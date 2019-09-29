@@ -70,9 +70,9 @@ var tabla={
 function traducir(){
   var codigo = $("#caja_codigo").val();
   codigo = codigo.trim();
-  codigo_partido = codigo.split(' ');
+  codigo_idividualizado = codigo.split(' ');
   $("#caja_resultado").val('');
-  codigo_partido.forEach(function(e) {
+  codigo_idividualizado.forEach(function(e) {
     if (/^([0-9])*$/.test(e)) {
       $("#caja_resultado").val($("#caja_resultado").val()+' '+tabla['const']);
     }else{

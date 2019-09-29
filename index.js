@@ -1,5 +1,5 @@
 $(document).ready(function(){
-
+  listeners()
 });
 
 var tabla={
@@ -67,20 +67,33 @@ var tabla={
   'const':62
 }
 
+function listeners(){
+  $("#caja_codigo").keyup(()=>{
+    if ($("#caja_codigo").val() != '') {
+      $("#caja_codigo").removeClass('invalid');
+    }
+  });
+}
+
 function traducir(){
   var codigo = $("#caja_codigo").val();
   codigo = codigo.trim();
   codigo_idividualizado = codigo.split(' ');
   $("#caja_resultado").val('');
-  codigo_idividualizado.forEach(function(e) {
-    if (/^([0-9])*$/.test(e)) {
-      $("#caja_resultado").val($("#caja_resultado").val()+' '+tabla['const']);
-    }else{
-      if(tabla[e] != undefined){
-        $("#caja_resultado").val($("#caja_resultado").val()+' '+tabla[e]);
+  codigo_idividualizado.forEach(function(item_codigo) {
+    if (item_codigo != '') {
+      if (/^([0-9])*$/.test(item_codigo)) {
+        $("#caja_resultado").val($("#caja_resultado").val()+' '+tabla['const']);
       }else{
-        $("#caja_resultado").val($("#caja_resultado").val()+' '+tabla['id']);
+        if(tabla[item_codigo] != undefined){
+          $("#caja_resultado").val($("#caja_resultado").val()+' '+tabla[item_codigo]);
+        }else{
+          $("#caja_resultado").val($("#caja_resultado").val()+' '+tabla['id']);
+        }
       }
+    }else{
+      M.toast({html:'Nada para traducir',classes:'red'});
+      $("#caja_codigo").addClass('invalid');
     }
   });
 }

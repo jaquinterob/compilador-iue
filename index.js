@@ -64,7 +64,8 @@ var tabla={
   'set':59,
   'get':60,
   'id':61,
-  'const':62
+  'const':62,
+  '==':63
 }
 
 function listeners(){

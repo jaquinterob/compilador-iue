@@ -1,7 +1,4 @@
-$(document).ready(function(){
-  listeners()
-});
-
+var regex = /[^a-z0-9\x20]/i;
 var tabla={
   '+':1,
   '-':2,
@@ -65,8 +62,13 @@ var tabla={
   'get':60,
   'id':61,
   'const':62,
-  '==':63
+  '==':63,
+  '()':64
 }
+
+$(document).ready(function(){
+  listeners()
+});
 
 function listeners(){
   $("#caja_codigo").keyup(()=>{
@@ -90,14 +92,42 @@ function traducir(){
           if(tabla[item_codigo] != undefined){
             $("#caja_resultado").val($("#caja_resultado").val()+' '+tabla[item_codigo]);
           }else{
-            $("#caja_resultado").val($("#caja_resultado").val()+' '+tabla['id']);
+            if (!regex.test(item_codigo)) {
+              $("#caja_resultado").val($("#caja_resultado").val()+' '+tabla['id']);
+            }else{
+              M.toast({html:'Expresión irregular en -> \''+item_codigo + '\'<br> Ayuda: los caracteres deben ir separados de las variables o constantes <a onclick="M.Toast.dismissAll();" style="margin-left:1%;color:#fff" class="waves-effect btn-flat"><i class="material-icons">close</i></a>',classes:'red',displayLength:20000});
+            }
           }
         }
       }
     });
+    verificacion_sintactica($("#caja_resultado").val());
   }else{
-    M.toast({html:'Nada para traducir',classes:'red'});
+    M.toast({html:'Nada para Compilar',classes:'red'});
     $("#caja_codigo").addClass('invalid');
     $("#caja_resultado").val('');
   }
 }
+
+function verificacion_sintactica(traduccion){
+  traduccion_individualizada = traduccion.split(' ');
+  for (var i = 1; i < traduccion_individualizada.length; i++) {
+    if (traduccion_individualizada[i] == tabla['if']) {
+      if (traduccion_individualizada[i+1] != undefined) {
+        if (traduccion_individualizada[i+1] != tabla['(']) {
+          M.toast({html:'Expresión irregular para la sentencia \'IF\'<br> Ayuda: Se esperaba un \'(\' <a onclick="M.Toast.dismissAll();" style="margin-left:1%;color:#fff" class="waves-effect btn-flat"><i class="material-icons">close</i></a>',classes:'red',displayLength:20000});
+        }
+      }else{
+        M.toast({html:'Expresión irregular para la sentencia \'IF\'<br> Ayuda: No se esperaba el fin de la linea   <a onclick="M.Toast.dismissAll();" style="margin-left:1%;color:#fff" class="waves-effect btn-flat"><i class="material-icons">close</i></a>',classes:'red',displayLength:20000});
+      }
+    }
+  }
+}
+
+
+
+
+
+// if (item == tabla['if']) {
+//
+// }

@@ -4,8 +4,9 @@
   <meta charset="utf-8">
   <title>Compilador IUE</title>
   <link rel="stylesheet" href="estilo.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <link rel="stylesheet" href="materialize/css/materialize.min.css">
+  <script src="materialize/js/materialize.min.js"></script>
+
   <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
   <meta name="viewport" content="width=device-width, user-scalable=no">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">

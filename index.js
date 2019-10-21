@@ -79,34 +79,41 @@ function listeners(){
 }
 
 function traducir(){
+  $("#caja_resultado").val('');
   var codigo = $("#caja_codigo").val();
-  codigo = codigo.trim();
-  if (codigo != '' ) {
-    codigo_idividualizado = codigo.split(' ');
-    $("#caja_resultado").val('');
-    codigo_idividualizado.forEach(function(item_codigo) {
-      if (item_codigo != '') {
-        if (/^([0-9])*$/.test(item_codigo)) {
-          $("#caja_resultado").val($("#caja_resultado").val()+' '+tabla['const']);
-        }else{
-          if(tabla[item_codigo] != undefined){
-            $("#caja_resultado").val($("#caja_resultado").val()+' '+tabla[item_codigo]);
+  var filas = codigo.split('\n');
+  var respuesta = '';
+  filas.forEach((fila)=>{
+    respuesta = '';
+    let codigo = fila.trim();
+    if (codigo != '' ) {
+      codigo_idividualizado = codigo.split(' ');
+      codigo_idividualizado.forEach(function(item_codigo) {
+        if (item_codigo != '') {
+          if (/^([0-9])*$/.test(item_codigo)) {
+            respuesta += ' '+tabla['const'];
           }else{
-            if (!regex.test(item_codigo)) {
-              $("#caja_resultado").val($("#caja_resultado").val()+' '+tabla['id']);
+            if(tabla[item_codigo] != undefined){
+              respuesta += ' '+tabla[item_codigo];
             }else{
-              M.toast({html:'Expresión irregular en -> \''+item_codigo + '\'<br> Ayuda: los caracteres deben ir separados de las variables o constantes <a onclick="M.Toast.dismissAll();" style="margin-left:1%;color:#fff" class="waves-effect btn-flat"><i class="material-icons">close</i></a>',classes:'red',displayLength:20000});
+              if (!regex.test(item_codigo)) {
+                respuesta += ' '+tabla['id'];
+              }else{
+                M.toast({html:'Expresión irregular en -> \''+item_codigo + '\'<br> Ayuda: los caracteres deben ir separados de las variables o constantes <a onclick="M.Toast.dismissAll();" style="margin-left:1%;color:#fff" class="waves-effect btn-flat"><i class="material-icons">close</i></a>',classes:'red',displayLength:20000});
+              }
             }
           }
         }
-      }
-    });
-    verificacion_sintactica($("#caja_resultado").val());
-  }else{
-    M.toast({html:'Nada para Compilar',classes:'red'});
-    $("#caja_codigo").addClass('invalid');
-    $("#caja_resultado").val('');
-  }
+      });
+      $("#caja_resultado").val($("#caja_resultado").val()+respuesta+'\n');
+        M.textareaAutoResize($('#caja_resultado'));
+     verificacion_sintactica($("#caja_resultado").val());
+    }else{
+      M.toast({html:'Nada para Compilar',classes:'red'});
+      $("#caja_codigo").addClass('invalid');
+      $("#caja_resultado").val('');
+    }
+  });
 }
 
 function verificacion_sintactica(traduccion){
@@ -123,11 +130,3 @@ function verificacion_sintactica(traduccion){
     }
   }
 }
-
-
-
-
-
-// if (item == tabla['if']) {
-//
-// }

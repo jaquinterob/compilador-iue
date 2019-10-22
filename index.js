@@ -106,8 +106,8 @@ function traducir(){
         }
       });
       $("#caja_resultado").val($("#caja_resultado").val()+respuesta+'\n');
-        M.textareaAutoResize($('#caja_resultado'));
-     verificacion_sintactica($("#caja_resultado").val());
+      M.textareaAutoResize($('#caja_resultado'));
+      verificacion_sintactica($("#caja_resultado").val());
     }else{
       M.toast({html:'Nada para Compilar',classes:'red'});
       $("#caja_codigo").addClass('invalid');
@@ -118,7 +118,11 @@ function traducir(){
 
 function verificacion_sintactica(traduccion){
   traduccion_individualizada = traduccion.split(' ');
+
+
+  
   for (var i = 1; i < traduccion_individualizada.length; i++) {
+
     if (traduccion_individualizada[i] == tabla['if']) {
       if (traduccion_individualizada[i+1] != undefined) {
         if (traduccion_individualizada[i+1] != tabla['(']) {
@@ -128,5 +132,67 @@ function verificacion_sintactica(traduccion){
         M.toast({html:'Expresión irregular para la sentencia \'IF\'<br> Ayuda: No se esperaba el fin de la linea   <a onclick="M.Toast.dismissAll();" style="margin-left:1%;color:#fff" class="waves-effect btn-flat"><i class="material-icons">close</i></a>',classes:'red',displayLength:20000});
       }
     }
+
+    if (traduccion_individualizada[i] == tabla['const']) {
+      if (traduccion_individualizada[i+1] != undefined) {
+        if (
+          traduccion_individualizada[i+1] != tabla[';'] &&
+          traduccion_individualizada[i+1] != tabla['+'] &&
+          traduccion_individualizada[i+1] != tabla['*'] &&
+          traduccion_individualizada[i+1] != tabla['/'] &&
+          traduccion_individualizada[i+1] != tabla['=='] &&
+          traduccion_individualizada[i+1] != tabla['%'] &&
+          traduccion_individualizada[i+1] != tabla['&&'] &&
+          traduccion_individualizada[i+1] != tabla['||']
+        ) {
+          M.toast({html:'Error de sintaxis. Despues de una constante<br> <a onclick="M.Toast.dismissAll();" style="margin-left:1%;color:#fff" class="waves-effect btn-flat"><i class="material-icons">close</i></a>',classes:'red',displayLength:20000});
+        }
+      }
+    }
+
+    if (traduccion_individualizada[i] == tabla['id']) {
+      if (traduccion_individualizada[i+1] != undefined) {
+        if (
+          traduccion_individualizada[i+1] != tabla[';'] &&
+          traduccion_individualizada[i+1] != tabla['+'] &&
+          traduccion_individualizada[i+1] != tabla['*'] &&
+          traduccion_individualizada[i+1] != tabla['/'] &&
+          traduccion_individualizada[i+1] != tabla['=='] &&
+          traduccion_individualizada[i+1] != tabla['%'] &&
+          traduccion_individualizada[i+1] != tabla['&&'] &&
+          traduccion_individualizada[i+1] != tabla['='] &&
+          traduccion_individualizada[i+1] != tabla['||']
+        ) {
+          M.toast({html:'Error de sintaxis. Despues de una variable<br> <a onclick="M.Toast.dismissAll();" style="margin-left:1%;color:#fff" class="waves-effect btn-flat"><i class="material-icons">close</i></a>',classes:'red',displayLength:20000});
+        }
+      }
+    }
+
+    if (traduccion_individualizada[i] == tabla['=']) {
+      if (traduccion_individualizada[i+1] != undefined) {
+        if (
+          traduccion_individualizada[i+1] != tabla['id'] &&
+          traduccion_individualizada[i+1] != tabla['const'] &&
+          traduccion_individualizada[i+1] != tabla['null']
+        ) {
+          M.toast({html:'Error de sintaxis. Despues de \'=\'<br> <a onclick="M.Toast.dismissAll();" style="margin-left:1%;color:#fff" class="waves-effect btn-flat"><i class="material-icons">close</i></a>',classes:'red',displayLength:20000});
+        }
+      }else{
+        M.toast({html:'Expresión irregular<br> Ayuda: No se esperaba el fin de la linea   <a onclick="M.Toast.dismissAll();" style="margin-left:1%;color:#fff" class="waves-effect btn-flat"><i class="material-icons">close</i></a>',classes:'red',displayLength:20000});
+      }
+    }
+
+    if (traduccion_individualizada[i] == tabla['var']) {
+      if (traduccion_individualizada[i+1] != undefined) {
+        if (
+          traduccion_individualizada[i+1] != tabla['id']
+        ) {
+          M.toast({html:'Error de sintaxis. Despues de \'var\'<br> <a onclick="M.Toast.dismissAll();" style="margin-left:1%;color:#fff" class="waves-effect btn-flat"><i class="material-icons">close</i></a>',classes:'red',displayLength:20000});
+        }
+      }else{
+        M.toast({html:'Expresión irregular<br> Ayuda: No se esperaba el fin de la linea   <a onclick="M.Toast.dismissAll();" style="margin-left:1%;color:#fff" class="waves-effect btn-flat"><i class="material-icons">close</i></a>',classes:'red',displayLength:20000});
+      }
+    }
+
   }
 }

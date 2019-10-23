@@ -63,6 +63,9 @@ var tabla={
   'id':61,
   'const':62,
   '==':63,
+  '=>':63,
+  '=<':63,
+  '!=':63,
   '()':64
 }
 
@@ -120,8 +123,19 @@ function verificacion_sintactica(traduccion){
   traduccion_individualizada = traduccion.split(' ');
 
 
-  
+
   for (var i = 1; i < traduccion_individualizada.length; i++) {
+    if (i == 1) {
+      if (
+        traduccion_individualizada[i] != tabla['id'] &&
+        traduccion_individualizada[i] != tabla['var'] &&
+        traduccion_individualizada[i] != tabla['if'] &&
+        traduccion_individualizada[i] != tabla['for'] &&
+        traduccion_individualizada[i] != tabla['while']
+      ) {
+        M.toast({html:'Error de sintaxis. al inicio de la linea. <br> <a onclick="M.Toast.dismissAll();" style="margin-left:1%;color:#fff" class="waves-effect btn-flat"><i class="material-icons">close</i></a>',classes:'red',displayLength:20000});
+      }
+    }
 
     if (traduccion_individualizada[i] == tabla['if']) {
       if (traduccion_individualizada[i+1] != undefined) {
@@ -130,6 +144,26 @@ function verificacion_sintactica(traduccion){
         }
       }else{
         M.toast({html:'Expresión irregular para la sentencia \'IF\'<br> Ayuda: No se esperaba el fin de la linea   <a onclick="M.Toast.dismissAll();" style="margin-left:1%;color:#fff" class="waves-effect btn-flat"><i class="material-icons">close</i></a>',classes:'red',displayLength:20000});
+      }
+    }
+
+    if (traduccion_individualizada[i] == tabla['for']) {
+      if (traduccion_individualizada[i+1] != undefined) {
+        if (traduccion_individualizada[i+1] != tabla['(']) {
+          M.toast({html:'Expresión irregular para la sentencia \'FOR\'<br> Ayuda: Se esperaba un \'(\' <a onclick="M.Toast.dismissAll();" style="margin-left:1%;color:#fff" class="waves-effect btn-flat"><i class="material-icons">close</i></a>',classes:'red',displayLength:20000});
+        }
+      }else{
+        M.toast({html:'Expresión irregular para la sentencia \'FOR\'<br> Ayuda: No se esperaba el fin de la linea   <a onclick="M.Toast.dismissAll();" style="margin-left:1%;color:#fff" class="waves-effect btn-flat"><i class="material-icons">close</i></a>',classes:'red',displayLength:20000});
+      }
+    }
+
+    if (traduccion_individualizada[i] == tabla['while']) {
+      if (traduccion_individualizada[i+1] != undefined) {
+        if (traduccion_individualizada[i+1] != tabla['(']) {
+          M.toast({html:'Expresión irregular para la sentencia \'WHILE\'<br> Ayuda: Se esperaba un \'(\' <a onclick="M.Toast.dismissAll();" style="margin-left:1%;color:#fff" class="waves-effect btn-flat"><i class="material-icons">close</i></a>',classes:'red',displayLength:20000});
+        }
+      }else{
+        M.toast({html:'Expresión irregular para la sentencia \'WHILE\'<br> Ayuda: No se esperaba el fin de la linea   <a onclick="M.Toast.dismissAll();" style="margin-left:1%;color:#fff" class="waves-effect btn-flat"><i class="material-icons">close</i></a>',classes:'red',displayLength:20000});
       }
     }
 
@@ -143,6 +177,9 @@ function verificacion_sintactica(traduccion){
           traduccion_individualizada[i+1] != tabla['=='] &&
           traduccion_individualizada[i+1] != tabla['%'] &&
           traduccion_individualizada[i+1] != tabla['&&'] &&
+          traduccion_individualizada[i+1] != tabla[']'] &&
+          traduccion_individualizada[i+1] != tabla['}'] &&
+          traduccion_individualizada[i+1] != tabla[')'] &&
           traduccion_individualizada[i+1] != tabla['||']
         ) {
           M.toast({html:'Error de sintaxis. Despues de una constante<br> <a onclick="M.Toast.dismissAll();" style="margin-left:1%;color:#fff" class="waves-effect btn-flat"><i class="material-icons">close</i></a>',classes:'red',displayLength:20000});
@@ -158,6 +195,10 @@ function verificacion_sintactica(traduccion){
           traduccion_individualizada[i+1] != tabla['*'] &&
           traduccion_individualizada[i+1] != tabla['/'] &&
           traduccion_individualizada[i+1] != tabla['=='] &&
+          traduccion_individualizada[i+1] != tabla['>'] &&
+          traduccion_individualizada[i+1] != tabla['<'] &&
+          traduccion_individualizada[i+1] != tabla['=<'] &&
+          traduccion_individualizada[i+1] != tabla['=>'] &&
           traduccion_individualizada[i+1] != tabla['%'] &&
           traduccion_individualizada[i+1] != tabla['&&'] &&
           traduccion_individualizada[i+1] != tabla['='] &&
@@ -188,6 +229,25 @@ function verificacion_sintactica(traduccion){
           traduccion_individualizada[i+1] != tabla['id']
         ) {
           M.toast({html:'Error de sintaxis. Despues de \'var\'<br> <a onclick="M.Toast.dismissAll();" style="margin-left:1%;color:#fff" class="waves-effect btn-flat"><i class="material-icons">close</i></a>',classes:'red',displayLength:20000});
+        }
+      }else{
+        M.toast({html:'Expresión irregular<br> Ayuda: No se esperaba el fin de la linea   <a onclick="M.Toast.dismissAll();" style="margin-left:1%;color:#fff" class="waves-effect btn-flat"><i class="material-icons">close</i></a>',classes:'red',displayLength:20000});
+      }
+    }
+
+    if (
+      traduccion_individualizada[i] == tabla['=='] ||
+      traduccion_individualizada[i] == tabla['>'] ||
+      traduccion_individualizada[i] == tabla['<'] ||
+      traduccion_individualizada[i] == tabla['=>'] ||
+      traduccion_individualizada[i] == tabla['!='] ||
+      traduccion_individualizada[i] == tabla['=<']) {
+      if (traduccion_individualizada[i+1] != undefined) {
+        if (
+          traduccion_individualizada[i+1] != tabla['id'] &&
+          traduccion_individualizada[i+1] != tabla['const']
+        ) {
+          M.toast({html:'Error de sintaxis. Despues de \'operador de comparación\'<br> <a onclick="M.Toast.dismissAll();" style="margin-left:1%;color:#fff" class="waves-effect btn-flat"><i class="material-icons">close</i></a>',classes:'red',displayLength:20000});
         }
       }else{
         M.toast({html:'Expresión irregular<br> Ayuda: No se esperaba el fin de la linea   <a onclick="M.Toast.dismissAll();" style="margin-left:1%;color:#fff" class="waves-effect btn-flat"><i class="material-icons">close</i></a>',classes:'red',displayLength:20000});
